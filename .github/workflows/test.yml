@@ -25,7 +25,7 @@ on:
         
       test_multi_files:
         description: '测试多文件'
-        required: false
+        required: true
         type: boolean
         default: true
         
@@ -52,6 +52,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.event.ref }}
+        
+    - name: Echo inputs
+      run: |
+        echo ${{ inputs.test_multi_files }}
+        echo ${{ inputs.test_multi_files == 'false'}}
+        echo ${{ inputs.test_multi_files == 'true'}}
+        echo ${{ inputs.gitee_release_id }}
         
     - name: Test create release(Single file)
       id: create_release
@@ -103,7 +110,7 @@ jobs:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
-        gitee_release_id: ${{ steps.create_release.outputs.release-id }}
+        gitee_release_id: ${{ steps.create_release_multi.outputs.release-id }}
         gitee_files: |
           LICENSE
           requirements.txt
