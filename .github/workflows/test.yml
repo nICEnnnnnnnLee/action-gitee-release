@@ -59,10 +59,14 @@ jobs:
         echo ${{ github.event.inputs.test_multi_files == 'false'}}
         echo ${{ github.event.inputs.test_multi_files == 'true'}}
         echo ${{ github.event.inputs.gitee_release_id }}
+        echo ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
+        echo ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
+        echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
+        echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
         
     - name: Test create release(Single file)
       id: create_release
-      if: ${{ inputs.gitee_release_id == '' && inputs.test_multi_files == 'false' }}
+      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
       uses: ./
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
@@ -77,7 +81,7 @@ jobs:
           
     - name: Test create release(Multi file)
       id: create_release_multi
-      if: ${{ inputs.gitee_release_id == '' && inputs.test_multi_files == 'true' }}
+      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
       uses: ./
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
@@ -93,7 +97,7 @@ jobs:
           .github/workflows/test.yml
           
     - name: Test upload single file to exist release - using last step id
-      if: ${{ inputs.gitee_release_id == '' && inputs.test_multi_files == 'false' }}
+      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
       uses: ./
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
@@ -104,7 +108,7 @@ jobs:
         gitee_file_path: ${{ inputs.gitee_file_path }}
           
     - name: Test upload multi file to exist release - using last step id
-      if: ${{ inputs.gitee_release_id == '' && inputs.test_multi_files == 'true' }}
+      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
       uses: ./
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
@@ -117,7 +121,7 @@ jobs:
           .github/workflows/test.yml
           
     - name: Test upload single file to exist release - using id from inputs
-      if: ${{ inputs.gitee_release_id != '' && inputs.test_multi_files == 'false' }}
+      if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
       uses: ./
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
@@ -128,7 +132,7 @@ jobs:
         gitee_file_path: ${{ inputs.gitee_file_path }}
         
     - name: Test upload multi file to exist release - using id from inputs
-      if: ${{ inputs.gitee_release_id != '' && inputs.test_multi_files == 'true' }}
+      if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
       uses: ./
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
