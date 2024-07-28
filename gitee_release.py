@@ -54,7 +54,7 @@ def get(key):
     
 def set_result(name, result):
     github_out = os.environ.get("GITHUB_OUTPUT")
-    print("os.environ.get("GITHUB_OUTPUT"): ", github_out)
+    print('os.environ.get("GITHUB_OUTPUT"): ', github_out)
     if github_out:
         with open(github_out, 'w', encoding='utf-8') as output:
             print("result: ", f"{name}={result}")
