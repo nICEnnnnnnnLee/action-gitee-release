@@ -22,14 +22,6 @@ on:
         description: 'Gitee release 名称'
         required: false
         default: Test v1.0
-      gitee_release_body:
-        description: 'Gitee release 描述'
-        required: false
-        default: 'Gitee release 描述'
-      gitee_target_commitish:
-        description: 'Gitee 分支名称或者commit SHA'
-        required: false
-        default: master
         
       gitee_file_name:
         description: '上传的附件名称'
@@ -64,8 +56,8 @@ jobs:
         gitee_token: ${{ inputs.gitee_token }}
         gitee_tag_name: ${{ inputs.gitee_tag_name }}
         gitee_release_name: ${{ inputs.gitee_release_name }}
-        gitee_release_body: ${{ inputs.gitee_release_body }}
-        gitee_target_commitish: ${{ inputs.gitee_target_commitish }}
+        gitee_release_body: 'Gitee release 描述'
+        gitee_target_commitish: master
         gitee_file_name: ${{ inputs.gitee_file_name }}
         gitee_file_path: ${{ inputs.gitee_file_path }}
         test_array: |
