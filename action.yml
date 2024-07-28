@@ -1,0 +1,69 @@
+name: 'action-gitee-release'
+description: '在Gitee项目发布release(可以上传附件)'
+inputs:
+
+  gitee_owner:
+    description: 'Gitee 用户名, 项目URL中可获取'
+    required: true
+  gitee_repo:
+    description: 'Gitee 项目名, 项目URL中可获取'
+    required: true
+  gitee_token:
+    description: 'Gitee api token'
+    required: true
+    
+  gitee_tag_name:
+    description: 'Gitee Tag 名称, 提倡以v字母为前缀做为Release名称，例如v1.0或者v2.3.4'
+    required: false
+  gitee_release_name:
+    description: 'Gitee release 名称'
+    required: false
+  gitee_release_body:
+    description: 'Gitee release 描述'
+    required: false
+  gitee_target_commitish:
+    description: 'Gitee 分支名称或者commit SHA'
+    required: false
+
+  gitee_file_name:
+    description: '上传的附件名称'
+    required: false
+  gitee_file_path:
+    description: '上传的附件的本地路径'
+    required: false
+    
+  gitee_release_id:
+    description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
+    required: false
+  
+  test_array:
+    description: '测试传入list'
+    required: false
+    
+outputs:
+  release_id:
+    description: '创建的release的id'
+  download_url:
+    description: '附件的下载地址'
+    
+runs:
+  using: "composite"
+  steps:
+    - name: Create release or Upload assets
+      shell: bash
+      env:
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: ${{ inputs.gitee_tag_name }}
+        gitee_release_name: ${{ inputs.gitee_release_name }}
+        gitee_release_body: ${{ inputs.gitee_release_body }}
+        gitee_target_commitish: ${{ inputs.gitee_target_commitish }}
+        gitee_file_name: ${{ inputs.gitee_file_name }}
+        gitee_file_path: ${{ inputs.gitee_file_path }}
+        gitee_release_id: ${{ inputs.gitee_release_id }}
+        test_array: ${{ inputs.test_array }}
+      run: |
+        pip install -r requirements
+        python gitee_release.py
+

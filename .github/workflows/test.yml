@@ -1,0 +1,89 @@
+name: Test
+on:
+  workflow_dispatch:
+    inputs: 
+      gitee_owner:
+        description: 'Gitee 用户名, 项目URL中可获取'
+        required: true
+        default: NiceLeee
+      gitee_repo:
+        description: 'Gitee 项目名, 项目URL中可获取'
+        required: true
+        default: NiceLeee
+      gitee_token:
+        description: 'Gitee api token'
+        required: true
+        
+      gitee_tag_name:
+        description: 'Gitee Tag 名称, 提倡以v字母为前缀做为Release名称，例如v1.0或者v2.3.4'
+        required: false
+        default: v1.0
+      gitee_release_name:
+        description: 'Gitee release 名称'
+        required: false
+        default: Test v1.0
+      gitee_release_body:
+        description: 'Gitee release 描述'
+        required: false
+        default: 'Gitee release 描述'
+      gitee_target_commitish:
+        description: 'Gitee 分支名称或者commit SHA'
+        required: false
+        default: master
+        
+      gitee_file_name:
+        description: '上传的附件名称'
+        required: false
+        default: '测试.txt'
+      gitee_file_path:
+        description: '上传的附件的本地路径'
+        required: false
+        default: '.gitignore'
+        
+      gitee_release_id:
+        description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
+        required: false
+      gitee_file_name_new:
+        description: '第二次上传的附件名称'
+        required: false
+        default: '测试2.txt'
+jobs:
+  upload_download_delete:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.ref }}
+        
+    - name: Test create release
+      id: create_release
+      uses: ./
+      with:
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: ${{ inputs.gitee_tag_name }}
+        gitee_release_name: ${{ inputs.gitee_release_name }}
+        gitee_release_body: ${{ inputs.gitee_release_body }}
+        gitee_target_commitish: ${{ inputs.gitee_target_commitish }}
+        gitee_file_name: ${{ inputs.gitee_file_name }}
+        gitee_file_path: ${{ inputs.gitee_file_path }}
+        test_array: |
+          test1
+          test2
+          test3
+          
+    - name: Test upload file to exist release
+      uses: ./
+      with:
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        release_id: ${{ steps.create_release.outputs.release_id }}
+        gitee_file_name: ${{ inputs.gitee_file_name_new }}
+        gitee_file_path: ${{ inputs.gitee_file_path }}
+        test_array: |
+          test21
+          test22
+          test23
+        
