@@ -69,7 +69,7 @@ jobs:
         gitee_file_path: ${{ inputs.gitee_file_path }}
           
     - name: Test create release(Multi file)
-      id: create_release
+      id: create_release_multi
       if: ${{ inputs.gitee_release_id == '' && inputs.test_multi_files == 'true' }}
       uses: ./
       with:
