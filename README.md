@@ -40,6 +40,6 @@
 - `gitee_file_name`：上传的附件名称
 - `gitee_file_path`：上传的附件的本地路径
 - `release_id`：上传附件对应的release的id。该值存在的话，不会再去尝试创建release。
-- 注意：Token需要以 [Secrets](https://docs.github.com/cn/actions/reference/encrypted-secrets) 方式给出，以保证密码不被泄露
+- 注意：Token需要以 [Secrets](https://docs.github.com/cn/actions/reference/encrypted-secrets) 方式给出，以保证token不被泄露
 
 

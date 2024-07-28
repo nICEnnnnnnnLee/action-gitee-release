@@ -64,6 +64,6 @@ runs:
         gitee_release_id: ${{ inputs.gitee_release_id }}
         test_array: ${{ inputs.test_array }}
       run: |
-        pip install -r requirements
+        pip install -r requirements.txt
         python gitee_release.py
 
