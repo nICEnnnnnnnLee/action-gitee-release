@@ -41,9 +41,9 @@ inputs:
     required: false
     
 outputs:
-  release_id:
+  release-id:
     description: '创建的release的id'
-  download_url:
+  download-url:
     description: '附件的下载地址'
     
 runs:

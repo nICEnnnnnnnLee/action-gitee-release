@@ -86,7 +86,7 @@ def create_release():
             success, msg = gitee_client.upload_asset(gitee_repo, release_id, file_name = gitee_file_name, file_path = gitee_file_path)
             if not success:
                 raise Exception("Upload file asset failed: " + msg)
-        set_result("release_id", release_id)
+        set_result("release-id", release_id)
     else:
         raise Exception("Create release failed: " + release_id)
 
@@ -105,7 +105,7 @@ def upload_asset():
     success, msg = gitee_client.upload_asset(gitee_repo, gitee_release_id, file_name = gitee_file_name, file_path = gitee_file_path)
     if not success:
         raise Exception("Upload file asset failed: " + msg)
-    set_result("download_url", msg)
+    set_result("download-url", msg)
         
 if __name__ == "__main__":
     gitee_release_id = os.environ.get("gitee_release_id")

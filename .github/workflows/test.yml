@@ -73,7 +73,7 @@ jobs:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
-        gitee_release_id: ${{ steps.create_release.outputs.release_id }}
+        gitee_release_id: ${{ steps.create_release.outputs.release-id }}
         gitee_file_name: ${{ inputs.gitee_file_name_new }}
         gitee_file_path: ${{ inputs.gitee_file_path }}
         test_array: |
