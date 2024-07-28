@@ -70,8 +70,13 @@ def set_result(name, result):
     github_out = os.environ.get("GITHUB_OUTPUT")
     if github_out:
         with open(github_out, 'a', encoding='utf-8') as output:
-            output.write(f"{name}={result}\n")
-        
+            if '\n' in result:
+                output.write(f"{name}={result}\n")
+            else:
+                output.write(f"{name}<<EOF\n")
+                output.write(f"{result}\n")
+                output.write(f"EOF\n")
+                
 def create_release():
     gitee_owner = get('gitee_owner')
     gitee_token = get('gitee_token')

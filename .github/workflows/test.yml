@@ -116,9 +116,8 @@ jobs:
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ steps.create_release_multi.outputs.release-id }}
         gitee_files: |
-          LICENSE
-          requirements.txt
-          .github/workflows/test.yml
+          action.yml
+          README.md
           
     - name: Test upload single file to exist release - using id from inputs
       if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
@@ -140,6 +139,5 @@ jobs:
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ inputs.gitee_release_id }}
         gitee_files: |
-          LICENSE
-          requirements.txt
-          .github/workflows/test.yml
+          action.yml
+          README.md
