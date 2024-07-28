@@ -25,21 +25,21 @@ inputs:
     description: 'Gitee 分支名称或者commit SHA'
     required: false
 
+  gitee_files:
+    description: '上传的附件列表(多个文件)'
+    required: false
+    
   gitee_file_name:
-    description: '上传的附件名称'
+    description: '上传的附件名称(单个文件)'
     required: false
   gitee_file_path:
-    description: '上传的附件的本地路径'
+    description: '上传的附件的本地路径(单个文件)'
     required: false
     
   gitee_release_id:
     description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
     required: false
   
-  test_array:
-    description: '测试传入list'
-    required: false
-    
 outputs:
   release-id:
     description: '创建的release的id'
@@ -61,10 +61,10 @@ runs:
         gitee_release_name: ${{ inputs.gitee_release_name }}
         gitee_release_body: ${{ inputs.gitee_release_body }}
         gitee_target_commitish: ${{ inputs.gitee_target_commitish }}
+        gitee_files: ${{ inputs.gitee_files }}
         gitee_file_name: ${{ inputs.gitee_file_name }}
         gitee_file_path: ${{ inputs.gitee_file_path }}
         gitee_release_id: ${{ inputs.gitee_release_id }}
-        test_array: ${{ inputs.test_array }}
       run: |
         pip install -r requirements.txt
         python gitee_release.py
