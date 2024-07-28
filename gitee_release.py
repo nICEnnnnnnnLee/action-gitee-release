@@ -54,8 +54,10 @@ def get(key):
     
 def set_result(name, result):
     github_out = os.environ.get("GITHUB_OUTPUT")
+    print("os.environ.get("GITHUB_OUTPUT"): ", github_out)
     if github_out:
         with open(github_out, 'w', encoding='utf-8') as output:
+            print("result: ", f"{name}={result}")
             output.write(f"{name}={result}")
         
 def create_release():
@@ -79,7 +81,7 @@ def create_release():
     success, release_id = gitee_client.create_release(repo = gitee_repo, tag_name = gitee_tag_name, name = gitee_release_name, 
                 body = gitee_release_body, target_commitish = gitee_target_commitish)
     if success:
-        print(release_id) # 421675
+        print(release_id)
         if gitee_file_path:
             success, msg = gitee_client.upload_asset(gitee_repo, release_id, file_name = gitee_file_name, file_path = gitee_file_path)
             if not success:
@@ -107,6 +109,7 @@ def upload_asset():
         
 if __name__ == "__main__":
     gitee_release_id = os.environ.get("gitee_release_id")
+    print("gitee_release_id: ", gitee_release_id)
     if gitee_release_id:
         upload_asset()
     else:

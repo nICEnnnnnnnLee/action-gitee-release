@@ -30,7 +30,7 @@ on:
       gitee_file_path:
         description: '上传的附件的本地路径'
         required: false
-        default: '.gitignore'
+        default: 'LICENSE'
         
       gitee_release_id:
         description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
