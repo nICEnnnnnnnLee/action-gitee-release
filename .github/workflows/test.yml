@@ -55,10 +55,10 @@ jobs:
         
     - name: Echo inputs
       run: |
-        echo ${{ inputs.test_multi_files }}
-        echo ${{ inputs.test_multi_files == 'false'}}
-        echo ${{ inputs.test_multi_files == 'true'}}
-        echo ${{ inputs.gitee_release_id }}
+        echo ${{ github.event.inputs.test_multi_files }}
+        echo ${{ github.event.inputs.test_multi_files == 'false'}}
+        echo ${{ github.event.inputs.test_multi_files == 'true'}}
+        echo ${{ github.event.inputs.gitee_release_id }}
         
     - name: Test create release(Single file)
       id: create_release
