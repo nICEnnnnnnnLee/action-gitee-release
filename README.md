@@ -25,7 +25,7 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    release_id: ${{ steps.create_release.outputs.release_id }}
+    release_id: ${{ steps.create_release.outputs.release-id }}
     gitee_file_name: 文件名称2
     gitee_file_path: 文件本地路径2
 ```
