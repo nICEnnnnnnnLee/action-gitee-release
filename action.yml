@@ -43,13 +43,15 @@ inputs:
 outputs:
   release-id:
     description: '创建的release的id'
+    value: ${{ steps.release.outputs.release-id }}
   download-url:
     description: '附件的下载地址'
-    
+    value: ${{ steps.release.outputs.download-url }}
 runs:
   using: "composite"
   steps:
     - name: Create release or Upload assets
+      id: release
       shell: bash
       env:
         gitee_owner: ${{ inputs.gitee_owner }}
