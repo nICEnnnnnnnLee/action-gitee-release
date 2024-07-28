@@ -75,7 +75,7 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    release_id: ${{ steps.create_release.outputs.release-id }}
+    gitee_release_id: ${{ steps.create_release.outputs.release-id }}
     gitee_file_name: 文件名称1
     gitee_file_path: 文件本地路径1
 ```
@@ -101,7 +101,7 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    release_id: ${{ steps.create_release.outputs.release-id }}
+    gitee_release_id: ${{ steps.create_release.outputs.release-id }}
     gitee_files: |
         文件路径1
         文件路径2
@@ -118,7 +118,7 @@
 - `gitee_files`：上传的附件列表(多个文件)
 - `gitee_file_name`：上传的附件名称(单个文件)
 - `gitee_file_path`：上传的附件的本地路径(单个文件)
-- `release_id`：上传附件对应的release的id。该值存在的话，不会再去尝试创建release。
+- `gitee_release_id`：上传附件对应的release的id。该值存在的话，不会再去尝试创建release。
 - 注意：Token需要以 [Secrets](https://docs.github.com/cn/actions/reference/encrypted-secrets) 方式给出，以保证token不被泄露
 
 
