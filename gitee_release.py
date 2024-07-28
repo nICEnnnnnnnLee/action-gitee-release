@@ -72,10 +72,11 @@ def set_result(name, result):
         with open(github_out, 'a', encoding='utf-8') as output:
             if '\n' in result:
                 output.write(f"{name}={result}\n")
+                print(f"{name}={result}\n")
             else:
-                output.write(f"{name}<<EOF\n")
-                output.write(f"{result}\n")
-                output.write(f"EOF\n")
+                delimiter = 'EOF'
+                output.write(f"{name}<<{delimiter}\n{result}\n{delimiter}\n")
+                print(f"{name}<<{delimiter}\n{result}\n{delimiter}\n")
                 
 def create_release():
     gitee_owner = get('gitee_owner')
