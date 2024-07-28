@@ -70,7 +70,7 @@ def set_result(name, result):
     github_out = os.environ.get("GITHUB_OUTPUT")
     if github_out:
         with open(github_out, 'a', encoding='utf-8') as output:
-            if '\n' in result:
+            if not '\n' in result:
                 output.write(f"{name}={result}\n")
                 print(f"{name}={result}\n")
             else:
