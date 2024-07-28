@@ -69,3 +69,7 @@ runs:
         pip install -r requirements.txt
         python gitee_release.py
 
+# Ref: https://haya14busa.github.io/github-action-brandings/
+branding:
+  icon: "square"
+  color: "blue"
