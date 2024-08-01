@@ -1,0 +1,139 @@
+name: Test(直接拉取项目)
+on:
+  workflow_dispatch:
+    inputs: 
+      gitee_owner:
+        description: 'Gitee 用户名, 项目URL中可获取'
+        required: true
+        default: NiceLeee
+      gitee_repo:
+        description: 'Gitee 项目名, 项目URL中可获取'
+        required: true
+        default: NiceLeee
+      gitee_token:
+        description: 'Gitee api token'
+        required: true
+        
+      gitee_tag_name:
+        description: 'Gitee Tag 名称, 提倡以v字母为前缀做为Release名称，例如v1.0或者v2.3.4'
+        required: false
+        default: v1.0
+      gitee_release_name:
+        description: 'Gitee release 名称'
+        required: false
+        default: Test v1.0
+        
+      test_multi_files:
+        description: '测试多文件'
+        required: true
+        type: boolean
+        default: true
+        
+      gitee_file_name:
+        description: '上传的附件名称'
+        required: false
+        default: '测试.txt'
+      gitee_file_path:
+        description: '上传的附件的本地路径'
+        required: false
+        default: 'LICENSE'
+        
+      gitee_release_id:
+        description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
+        required: false
+      gitee_file_name_new:
+        description: '第二次上传的附件名称'
+        required: false
+        default: '测试2.txt'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Echo inputs
+      run: |
+        echo ${{ github.event.inputs.test_multi_files }}
+        echo ${{ github.event.inputs.test_multi_files == 'false'}}
+        echo ${{ github.event.inputs.test_multi_files == 'true'}}
+        echo ${{ github.event.inputs.gitee_release_id }}
+        echo ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
+        echo ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
+        echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
+        echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
+        
+    - name: Test create release(Single file)
+      id: create_release
+      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
+      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      with:
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: ${{ inputs.gitee_tag_name }}
+        gitee_release_name: ${{ inputs.gitee_release_name }}
+        gitee_release_body: 'Gitee release 描述'
+        gitee_target_commitish: master
+        gitee_file_name: ${{ inputs.gitee_file_name }}
+        gitee_file_path: ${{ inputs.gitee_file_path }}
+          
+    - name: Test create release(Multi file)
+      id: create_release_multi
+      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
+      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      with:
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: ${{ inputs.gitee_tag_name }}
+        gitee_release_name: ${{ inputs.gitee_release_name }}
+        gitee_release_body: 'Gitee release 描述'
+        gitee_target_commitish: master
+        gitee_files: |
+          LICENSE
+          requirements.txt
+          .github/workflows/test.yml
+          
+    - name: Test upload single file to exist release - using last step id
+      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
+      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      with:
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_release_id: ${{ steps.create_release.outputs.release-id }}
+        gitee_file_name: ${{ inputs.gitee_file_name_new }}
+        gitee_file_path: ${{ inputs.gitee_file_path }}
+          
+    - name: Test upload multi file to exist release - using last step id
+      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
+      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      with:
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_release_id: ${{ steps.create_release_multi.outputs.release-id }}
+        gitee_files: |
+          action.yml
+          README.md
+          
+    - name: Test upload single file to exist release - using id from inputs
+      if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
+      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      with:
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_release_id: ${{ inputs.gitee_release_id }}
+        gitee_file_name: ${{ inputs.gitee_file_name_new }}
+        gitee_file_path: ${{ inputs.gitee_file_path }}
+        
+    - name: Test upload multi file to exist release - using id from inputs
+      if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
+      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      with:
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_release_id: ${{ inputs.gitee_release_id }}
+        gitee_files: |
+          action.yml
+          README.md
