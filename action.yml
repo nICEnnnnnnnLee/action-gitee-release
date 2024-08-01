@@ -66,6 +66,7 @@ runs:
         gitee_file_path: ${{ inputs.gitee_file_path }}
         gitee_release_id: ${{ inputs.gitee_release_id }}
       run: |
+        cd ${{ github.action_path }}
         pip install -r requirements.txt
         python gitee_release.py
 
