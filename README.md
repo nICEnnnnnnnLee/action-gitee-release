@@ -7,7 +7,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -22,7 +22,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -39,7 +39,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -58,7 +58,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -70,7 +70,7 @@
 
       
 - name: Test upload file to exist release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -84,7 +84,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -96,7 +96,7 @@
 
       
 - name: Test upload file to exist release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
