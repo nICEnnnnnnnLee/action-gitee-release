@@ -63,7 +63,7 @@ jobs:
     - name: Test create release(Single file)
       id: create_release
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
-      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      uses: nicennnnnnnlee/action-gitee-release@master
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
@@ -78,7 +78,7 @@ jobs:
     - name: Test create release(Multi file)
       id: create_release_multi
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
-      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      uses: nicennnnnnnlee/action-gitee-release@master
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
@@ -94,7 +94,7 @@ jobs:
           
     - name: Test upload single file to exist release - using last step id
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
-      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      uses: nicennnnnnnlee/action-gitee-release@master
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
@@ -105,7 +105,7 @@ jobs:
           
     - name: Test upload multi file to exist release - using last step id
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
-      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      uses: nicennnnnnnlee/action-gitee-release@master
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
@@ -117,7 +117,7 @@ jobs:
           
     - name: Test upload single file to exist release - using id from inputs
       if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
-      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      uses: nicennnnnnnlee/action-gitee-release@master
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
@@ -128,7 +128,7 @@ jobs:
         
     - name: Test upload multi file to exist release - using id from inputs
       if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
-      uses: nicennnnnnnlee/action-gitee-release@v1.0.1
+      uses: nicennnnnnnlee/action-gitee-release@master
       with:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
