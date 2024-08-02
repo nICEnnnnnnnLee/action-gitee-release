@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding:utf-8
-import os
+import os, glob
 import requests,json
 from requests_toolbelt import MultipartEncoder
 
@@ -78,6 +78,25 @@ def set_result(name, result):
                 output.write(f"{name}<<{delimiter}\n{result}\n{delimiter}\n")
                 print(f"{name}<<{delimiter}\n{result}\n{delimiter}\n")
                 
+def upload_assets(gitee_files, gitee_client, gitee_repo, gitee_release_id):
+    result = []
+    uploaded_path = set()
+    for file_path_pattern in gitee_files:
+        file_path_pattern = file_path_pattern.strip()
+        recursive = True if "**" in file_path_pattern else False
+        files = glob.glob(file_path_pattern, recursive = recursive)
+        if len(files) == 0:
+            raise ValueError('file_path_pattern does not match: ' + file_path_pattern)
+        for file_path in files:
+            if file_path in uploaded_path or os.path.isdir(file_path):
+                continue
+            success, msg = gitee_client.upload_asset(gitee_repo, gitee_release_id, file_name = os.path.basename(file_path), file_path = file_path)
+            if not success:
+                raise Exception("Upload file asset failed: " + msg)
+            result.append(msg)
+            uploaded_path.add(file_path)
+    return result
+    
 def create_release():
     gitee_owner = get('gitee_owner')
     gitee_token = get('gitee_token')
@@ -104,13 +123,7 @@ def create_release():
     if success:
         print(release_id)
         if gitee_files:
-            for file_path in gitee_files:
-                file_path = file_path.strip()
-                if not os.path.isfile(file_path):
-                    raise ValueError('file_path not exists: ' + file_path)
-                success, msg = gitee_client.upload_asset(gitee_repo, release_id, file_name = os.path.basename(file_path), file_path = file_path)
-                if not success:
-                    raise Exception("Upload file asset failed: " + msg)
+            upload_assets(gitee_files, gitee_client, gitee_repo, release_id)
         elif gitee_file_path:
             success, msg = gitee_client.upload_asset(gitee_repo, release_id, file_name = gitee_file_name, file_path = gitee_file_path)
             if not success:
@@ -129,16 +142,8 @@ def upload_asset():
     
     gitee_client = Gitee(owner = gitee_owner, token = gitee_token)
     if gitee_files:
-        result = []
         gitee_files = gitee_files.strip().split("\n")
-        for file_path in gitee_files:
-            file_path = file_path.strip()
-            if not os.path.isfile(file_path):
-                raise ValueError('file_path not exists: ' + file_path)
-            success, msg = gitee_client.upload_asset(gitee_repo, gitee_release_id, file_name = os.path.basename(file_path), file_path = file_path)
-            if not success:
-                raise Exception("Upload file asset failed: " + msg)
-            result.append(msg)
+        result = upload_assets(gitee_files, gitee_client, gitee_repo, gitee_release_id)
         set_result("download-url", '\n'.join(result))
     else:
         gitee_file_name = get('gitee_file_name')
