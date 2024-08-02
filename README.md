@@ -7,7 +7,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.3
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -22,7 +22,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.3
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -39,7 +39,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.3
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -58,7 +58,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.3
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -70,7 +70,7 @@
 
       
 - name: Test upload file to exist release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.3
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -84,7 +84,7 @@
 ```
 - name: Test create release
   id: create_release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.3
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -96,7 +96,7 @@
 
       
 - name: Test upload file to exist release
-  uses: nicennnnnnnlee/action-gitee-release@v1.0.2
+  uses: nicennnnnnnlee/action-gitee-release@v1.0.3
   with:
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
@@ -115,7 +115,7 @@
 - `gitee_release_name`：Gitee release 名称
 - `gitee_release_body`：Gitee release 描述
 - `gitee_target_commitish`：Gitee 分支名称或者commit SHA
-- `gitee_files`：上传的附件列表(多个文件)
+- `gitee_files`：上传的附件列表(多个文件)。此处的文件路径支持规则匹配，参考[python-glob](https://docs.python.org/zh-cn/dev/library/glob.html)
 - `gitee_file_name`：上传的附件名称(单个文件)
 - `gitee_file_path`：上传的附件的本地路径(单个文件)
 - `gitee_release_id`：上传附件对应的release的id。该值存在的话，不会再去尝试创建release。
