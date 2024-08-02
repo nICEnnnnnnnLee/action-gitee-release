@@ -29,22 +29,10 @@ on:
         type: boolean
         default: true
         
-      gitee_file_name:
-        description: '上传的附件名称'
-        required: false
-        default: '测试.txt'
-      gitee_file_path:
-        description: '上传的附件的本地路径'
-        required: false
-        default: 'LICENSE'
-        
       gitee_release_id:
         description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
         required: false
-      gitee_file_name_new:
-        description: '第二次上传的附件名称'
-        required: false
-        default: '测试2.txt'
+        
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -60,6 +48,15 @@ jobs:
         echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
         echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
         
+    - name: Create test files
+      run: |
+        mkdir test_dir
+        cd test_dir
+        echo file1 > test_file1.txt
+        echo file2 > test_file2.txt
+        echo file3 > test_file3.txt
+        echo file4 > test_file4.md
+        
     - name: Test create release(Single file)
       id: create_release
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
@@ -72,8 +69,8 @@ jobs:
         gitee_release_name: ${{ inputs.gitee_release_name }}
         gitee_release_body: 'Gitee release 描述'
         gitee_target_commitish: master
-        gitee_file_name: ${{ inputs.gitee_file_name }}
-        gitee_file_path: ${{ inputs.gitee_file_path }}
+        gitee_file_name: 测试文件1.txt
+        gitee_file_path: ./test_dir/test_file1.txt
           
     - name: Test create release(Multi file)
       id: create_release_multi
@@ -88,9 +85,8 @@ jobs:
         gitee_release_body: 'Gitee release 描述'
         gitee_target_commitish: master
         gitee_files: |
-          LICENSE
-          requirements.txt
-          .github/workflows/test.yml
+          ./test_dir/test*.txt
+          ./test_dir/test*.md
           
     - name: Test upload single file to exist release - using last step id
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
@@ -100,8 +96,8 @@ jobs:
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ steps.create_release.outputs.release-id }}
-        gitee_file_name: ${{ inputs.gitee_file_name_new }}
-        gitee_file_path: ${{ inputs.gitee_file_path }}
+        gitee_file_name: 测试文件2.txt
+        gitee_file_path: ./test_dir/test_file2.txt
           
     - name: Test upload multi file to exist release - using last step id
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
@@ -112,8 +108,8 @@ jobs:
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ steps.create_release_multi.outputs.release-id }}
         gitee_files: |
-          action.yml
-          README.md
+          ./test_dir/test*.txt
+          ./test_dir/test*.md
           
     - name: Test upload single file to exist release - using id from inputs
       if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
@@ -123,8 +119,8 @@ jobs:
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ inputs.gitee_release_id }}
-        gitee_file_name: ${{ inputs.gitee_file_name_new }}
-        gitee_file_path: ${{ inputs.gitee_file_path }}
+        gitee_file_name: 测试文件3.txt
+        gitee_file_path: ./test_dir/test_file3.txt
         
     - name: Test upload multi file to exist release - using id from inputs
       if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
@@ -135,5 +131,5 @@ jobs:
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ inputs.gitee_release_id }}
         gitee_files: |
-          action.yml
-          README.md
+          ./test_dir/test*.txt
+          ./test_dir/test*.md
