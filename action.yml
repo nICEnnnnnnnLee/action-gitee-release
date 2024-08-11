@@ -67,7 +67,7 @@ runs:
         gitee_release_id: ${{ inputs.gitee_release_id }}
       run: |
         pip install -r "${{ github.action_path }}/requirements.txt"
-        python ${{ github.action_path }}/gitee_release.py
+        python "${{ github.action_path }}/gitee_release.py"
 
 # Ref: https://haya14busa.github.io/github-action-brandings/
 branding:
