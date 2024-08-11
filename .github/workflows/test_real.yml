@@ -31,14 +31,19 @@ on:
         
       gitee_release_id:
         description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
-        required: false
+        required: false        
+      runs_on:
+        description: '测试平台 ubuntu-latest/windows-latest 等'
+        required: true
+        default: ubuntu-latest
         
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runs_on }}
     steps:
     - name: Echo inputs
       run: |
+        echo ${{ inputs.runs_on }}
         echo ${{ github.event.inputs.test_multi_files }}
         echo ${{ github.event.inputs.test_multi_files == 'false'}}
         echo ${{ github.event.inputs.test_multi_files == 'true'}}
