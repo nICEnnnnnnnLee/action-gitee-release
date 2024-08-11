@@ -44,14 +44,14 @@ jobs:
     - name: Echo inputs
       run: |
         echo ${{ inputs.runs_on }}
-        echo ${{ github.event.inputs.test_multi_files }}
-        echo ${{ github.event.inputs.test_multi_files == 'false'}}
-        echo ${{ github.event.inputs.test_multi_files == 'true'}}
-        echo ${{ github.event.inputs.gitee_release_id }}
-        echo ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
-        echo ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
-        echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
-        echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
+        echo 1-${{ github.event.inputs.test_multi_files }}
+        echo 2-${{ github.event.inputs.test_multi_files == 'false'}}
+        echo 3-${{ github.event.inputs.test_multi_files == 'true'}}
+        echo 4-${{ github.event.inputs.gitee_release_id }}
+        echo 5-${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
+        echo 6-${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
+        echo 7-${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
+        echo 8-${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
         
     - name: Create test files
       run: |
