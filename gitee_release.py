@@ -1,14 +1,55 @@
 #!/usr/bin/env python
 # coding:utf-8
 import os, glob
-import requests,json
+import requests,json,time
 from requests_toolbelt import MultipartEncoder
+from functools import wraps
 
+retry_times = os.environ.get("gitee_upload_retry_times", "0")
+try:
+    retry_times = int(retry_times)
+except:
+    retry_times = 0
+    
+def Retry(retry, include_exceptions = [Exception], exclude_exceptions = [ValueError], sleep = 1):
+    def decoratedRetry(func):
+        def checkRun(retry, *args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                if no_catch(e, exclude_exceptions) or not need_catch(e, include_exceptions):
+                    raise e
+                if(retry == 0):
+                    raise e
+                else:
+                    print('error catched:', e)
+                    if sleep > 0:
+                        time.sleep(sleep)
+                    return checkRun(retry-1, *args, **kwargs)
+                    
+        @wraps(func)      
+        def run(*args, **kwargs):
+            return checkRun(retry, *args, **kwargs)
+        return run
+    return decoratedRetry
+
+def need_catch(exception, include_exceptions):
+    for ex in include_exceptions:
+        if isinstance(exception, ex):
+            return True
+    return False
+    
+def no_catch(exception, exclude_exceptions):
+    for ex in exclude_exceptions:
+        if isinstance(exception, ex):
+            return True
+    return False
+    
 class Gitee:
     def __init__(self, owner, token):
         self.owner = owner
         self.token = token
-        
+
     def create_release(self, repo, tag_name, name, body = '-', target_commitish = 'master'):
         url = f'https://gitee.com/api/v5/repos/{self.owner}/{repo}/releases'
         data = {
@@ -27,7 +68,8 @@ class Gitee:
             return True, res["id"]
         else:
             return False, "No 'id' in response"
-            
+
+    @Retry(retry_times)
     def upload_asset(self, repo, release_id, files = None, file_name = None, file_path = None):
         if files:
             fields = [('access_token', self.token)]

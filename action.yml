@@ -40,6 +40,10 @@ inputs:
     description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
     required: false
   
+  gitee_upload_retry_times:
+    description: '上传附件失败后的尝试次数'
+    required: false
+    
 outputs:
   release-id:
     description: '创建的release的id'
@@ -65,6 +69,7 @@ runs:
         gitee_file_name: ${{ inputs.gitee_file_name }}
         gitee_file_path: ${{ inputs.gitee_file_path }}
         gitee_release_id: ${{ inputs.gitee_release_id }}
+        gitee_upload_retry_times: ${{ inputs.gitee_upload_retry_times }}
       run: |
         pip install -r "${{ github.action_path }}/requirements.txt"
         python "${{ github.action_path }}/gitee_release.py"
