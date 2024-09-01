@@ -130,7 +130,7 @@ jobs:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
-        gitee_release_id: ${{ inputs.gitee_release_id 
+        gitee_release_id: ${{ inputs.gitee_release_id }}
         gitee_upload_retry_times:  ${{ inputs.gitee_upload_retry_times }}
         gitee_file_name: 测试文件3.txt
         gitee_file_path: ./test_dir/test_file3.txt
