@@ -31,7 +31,10 @@ on:
         
       gitee_release_id:
         description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
-        required: false        
+        required: false
+      gitee_upload_retry_times:
+        description: '上传附件失败后的尝试次数'
+        required: false
       runs_on:
         description: '测试平台 ubuntu-latest/windows-latest 等'
         required: true
@@ -73,7 +76,8 @@ jobs:
         gitee_tag_name: ${{ inputs.gitee_tag_name }}
         gitee_release_name: ${{ inputs.gitee_release_name }}
         gitee_release_body: 'Gitee release 描述'
-        gitee_target_commitish: master
+        gitee_target_commitish: 
+        gitee_upload_retry_times:  ${{ inputs.gitee_upload_retry_times }}
         gitee_file_name: 测试文件1.txt
         gitee_file_path: ./test_dir/test_file1.txt
           
@@ -88,7 +92,8 @@ jobs:
         gitee_tag_name: ${{ inputs.gitee_tag_name }}
         gitee_release_name: ${{ inputs.gitee_release_name }}
         gitee_release_body: 'Gitee release 描述'
-        gitee_target_commitish: master
+        gitee_target_commitish: 
+        gitee_upload_retry_times:  ${{ inputs.gitee_upload_retry_times }}
         gitee_files: |
           ./test_dir/test*.txt
           ./test_dir/test*.md
@@ -101,6 +106,7 @@ jobs:
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ steps.create_release.outputs.release-id }}
+        gitee_upload_retry_times:  ${{ inputs.gitee_upload_retry_times }}
         gitee_file_name: 测试文件2.txt
         gitee_file_path: ./test_dir/test_file2.txt
           
@@ -112,6 +118,7 @@ jobs:
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ steps.create_release_multi.outputs.release-id }}
+        gitee_upload_retry_times:  ${{ inputs.gitee_upload_retry_times }}
         gitee_files: |
           ./test_dir/test*.txt
           ./test_dir/test*.md
@@ -123,7 +130,8 @@ jobs:
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
-        gitee_release_id: ${{ inputs.gitee_release_id }}
+        gitee_release_id: ${{ inputs.gitee_release_id 
+        gitee_upload_retry_times:  ${{ inputs.gitee_upload_retry_times }}
         gitee_file_name: 测试文件3.txt
         gitee_file_path: ./test_dir/test_file3.txt
         
@@ -135,6 +143,7 @@ jobs:
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ inputs.gitee_release_id }}
+        gitee_upload_retry_times:  ${{ inputs.gitee_upload_retry_times }}
         gitee_files: |
           ./test_dir/test*.txt
           ./test_dir/test*.md
