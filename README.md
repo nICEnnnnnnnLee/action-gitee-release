@@ -69,10 +69,26 @@
       文件路径2
 ```
 
-### 4.1. 向已有 release 上传附件（通过 tag 定位）
+### 4.1. 向已有 release 上传单个附件（通过 tag 定位）
 
 ```yaml
-- name: Upload Assets to Existing Release by Tag
+- name: Upload Single Asset to Existing Release by Tag
+  uses: nicennnnnnnlee/action-gitee-release@master
+  with:
+    gitee_action: upload_asset
+    gitee_owner: Gitee用户名
+    gitee_repo: Gitee项目名
+    gitee_token: ${{ secrets.gitee_token }}
+    gitee_tag_name: v1.0.0
+    gitee_upload_retry_times: 3
+    gitee_file_name: 新附件名称
+    gitee_file_path: 新附件本地路径
+```
+
+### 4.2. 向已有 release 上传多个附件（通过 tag 定位）
+
+```yaml
+- name: Upload Multiple Assets to Existing Release by Tag
   uses: nicennnnnnnlee/action-gitee-release@master
   with:
     gitee_action: upload_asset
@@ -86,10 +102,26 @@
       文件路径2
 ```
 
-### 4.1. 向已有 release 上传附件（通过 release_id 定位）
+### 4.3. 向已有 release 上传单个附件（通过 release_id 定位）
 
 ```yaml
-- name: Upload Assets to Existing Release by ID
+- name: Upload Single Asset to Existing Release by ID
+  uses: nicennnnnnnlee/action-gitee-release@master
+  with:
+    gitee_action: upload_asset
+    gitee_owner: Gitee用户名
+    gitee_repo: Gitee项目名
+    gitee_token: ${{ secrets.gitee_token }}
+    gitee_release_id: 12345
+    gitee_upload_retry_times: 3
+    gitee_file_name: 新附件名称
+    gitee_file_path: 新附件本地路径
+```
+
+### 4.4. 向已有 release 上传多个附件（通过 release_id 定位）
+
+```yaml
+- name: Upload Multiple Assets to Existing Release by ID
   uses: nicennnnnnnlee/action-gitee-release@master
   with:
     gitee_action: upload_asset
@@ -116,7 +148,21 @@
     gitee_tag_name: v1.0.0
 ```
 
-### 6. 删除 release 中的附件
+### 6.1. 删除 release 中的单个附件
+
+```yaml
+- name: Delete Single Asset
+  uses: nicennnnnnnlee/action-gitee-release@master
+  with:
+    gitee_action: delete_asset
+    gitee_owner: Gitee用户名
+    gitee_repo: Gitee项目名
+    gitee_token: ${{ secrets.gitee_token }}
+    gitee_tag_name: v1.0.0
+    gitee_delete_assets: 文件名
+```
+
+### 6.2. 删除 release 中的多个附件
 
 ```yaml
 - name: Delete Multiple Assets
@@ -146,6 +192,35 @@
     gitee_tag_name: v1.0.0
     gitee_old_asset_name: 旧文件名称
     gitee_new_file_path: 新文件本地路径
+```
+
+### 8. 使用 Action 输出的综合示例
+
+```yaml
+- name: Create Release and Use Output
+  id: create_release
+  uses: nicennnnnnnlee/action-gitee-release@master
+  with:
+    gitee_action: create_release
+    gitee_owner: Gitee用户名
+    gitee_repo: Gitee项目名
+    gitee_token: ${{ secrets.gitee_token }}
+    gitee_tag_name: v1.0.0
+    gitee_release_name: Test v1.0.0
+    gitee_release_body: Release 描述
+    gitee_target_commitish: master
+
+- name: Upload Additional Assets Using Release ID
+  uses: nicennnnnnnlee/action-gitee-release@master
+  with:
+    gitee_action: upload_asset
+    gitee_owner: Gitee用户名
+    gitee_repo: Gitee项目名
+    gitee_token: ${{ secrets.gitee_token }}
+    gitee_release_id: ${{ steps.create_release.outputs.release-id }}
+    gitee_files: |
+      additional_file1.txt
+      additional_file2.txt
 ```
 
 ## 参数说明
@@ -180,6 +255,12 @@
 
 - `gitee_old_asset_name`：要更新的旧附件名称
 - `gitee_new_file_path`：新附件的本地路径
+
+## 输出说明
+
+### create_release 操作输出
+
+- `release-id`：创建的 release 的 ID，可用于后续的 upload_asset 操作
 
 ## 注意事项
 
