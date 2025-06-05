@@ -69,6 +69,7 @@ jobs:
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
       uses: ./
       with:
+        gitee_action: create_release
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
@@ -84,6 +85,7 @@ jobs:
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
       uses: ./
       with:
+        gitee_action: create_release
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
@@ -96,10 +98,11 @@ jobs:
           requirements.txt
           .github/workflows/test.yml
           
-    - name: Test upload single file to exist release - using last step id
+    - name: Test upload single file to exist release - using release_id from last step
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
       uses: ./
       with:
+        gitee_action: upload_asset
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
@@ -107,10 +110,11 @@ jobs:
         gitee_file_name: ${{ inputs.gitee_file_name_new }}
         gitee_file_path: ${{ inputs.gitee_file_path }}
           
-    - name: Test upload multi file to exist release - using last step id
+    - name: Test upload multi file to exist release - using release_id from last step
       if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
       uses: ./
       with:
+        gitee_action: upload_asset
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
@@ -119,10 +123,11 @@ jobs:
           action.yml
           README.md
           
-    - name: Test upload single file to exist release - using id from inputs
+    - name: Test upload single file to exist release - using release_id from inputs
       if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
       uses: ./
       with:
+        gitee_action: upload_asset
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
@@ -130,10 +135,11 @@ jobs:
         gitee_file_name: ${{ inputs.gitee_file_name_new }}
         gitee_file_path: ${{ inputs.gitee_file_path }}
         
-    - name: Test upload multi file to exist release - using id from inputs
+    - name: Test upload multi file to exist release - using release_id from inputs
       if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
       uses: ./
       with:
+        gitee_action: upload_asset
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
@@ -141,3 +147,48 @@ jobs:
         gitee_files: |
           action.yml
           README.md
+
+    - name: Test upload using tag_name
+      if: ${{ inputs.gitee_release_id == '' }}
+      uses: ./
+      with:
+        gitee_action: upload_asset
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: ${{ inputs.gitee_tag_name }}
+        gitee_file_name: 'tag-upload-test.txt'
+        gitee_file_path: 'LICENSE'
+        
+    - name: Test delete asset by tag_name and asset name
+      if: ${{ inputs.gitee_release_id == '' }}
+      uses: ./
+      with:
+        gitee_action: delete_asset
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: ${{ inputs.gitee_tag_name }}
+        gitee_delete_assets: 'tag-upload-test.txt'
+        
+    - name: Test update asset by tag_name
+      if: ${{ inputs.gitee_release_id == '' }}
+      uses: ./
+      with:
+        gitee_action: update_asset
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: ${{ inputs.gitee_tag_name }}
+        gitee_old_asset_name: ${{ inputs.gitee_file_name }}
+        gitee_new_file_path: 'requirements.txt'
+        
+    - name: Test delete release by tag_name
+      if: ${{ inputs.gitee_release_id == '' }}
+      uses: ./
+      with:
+        gitee_action: delete_release
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: ${{ inputs.gitee_tag_name }}
