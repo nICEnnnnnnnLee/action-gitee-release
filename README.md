@@ -24,8 +24,8 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
-    gitee_release_name: Test v1.0.0
+    gitee_tag_name: v2.0.0
+    gitee_release_name: Test v2.0.0
     gitee_release_body: Release 描述
     gitee_target_commitish: master
 ```
@@ -40,8 +40,8 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
-    gitee_release_name: Test v1.0.0
+    gitee_tag_name: v2.0.0
+    gitee_release_name: Test v2.0.0
     gitee_release_body: Release 描述
     gitee_target_commitish: master
     gitee_upload_retry_times: 3
@@ -59,8 +59,8 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
-    gitee_release_name: Test v1.0.0
+    gitee_tag_name: v2.0.0
+    gitee_release_name: Test v2.0.0
     gitee_release_body: Release 描述
     gitee_target_commitish: master
     gitee_upload_retry_times: 3
@@ -79,7 +79,7 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
+    gitee_tag_name: v2.0.0
     gitee_upload_retry_times: 3
     gitee_file_name: 新附件名称
     gitee_file_path: 新附件本地路径
@@ -95,7 +95,7 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
+    gitee_tag_name: v2.0.0
     gitee_upload_retry_times: 3
     gitee_files: |
       文件路径1
@@ -145,7 +145,7 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
+    gitee_tag_name: v2.0.0
 ```
 
 ### 6.1. 删除 release 中的单个附件
@@ -158,7 +158,7 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
+    gitee_tag_name: v2.0.0
     gitee_delete_assets: 文件名
 ```
 
@@ -172,7 +172,7 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
+    gitee_tag_name: v2.0.0
     gitee_delete_assets: |
       文件名1
       文件名2
@@ -189,7 +189,7 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
+    gitee_tag_name: v2.0.0
     gitee_old_asset_name: 旧文件名称
     gitee_new_file_path: 新文件本地路径
 ```
@@ -205,8 +205,8 @@
     gitee_owner: Gitee用户名
     gitee_repo: Gitee项目名
     gitee_token: ${{ secrets.gitee_token }}
-    gitee_tag_name: v1.0.0
-    gitee_release_name: Test v1.0.0
+    gitee_tag_name: v2.0.0
+    gitee_release_name: Test v2.0.0
     gitee_release_body: Release 描述
     gitee_target_commitish: master
 
