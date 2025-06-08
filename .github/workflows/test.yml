@@ -1,4 +1,4 @@
-name: Test
+name: Comprehensive Test
 on:
   workflow_dispatch:
     inputs: 
@@ -13,131 +13,201 @@ on:
       gitee_token:
         description: 'Gitee api token'
         required: true
-        
-      gitee_tag_name:
-        description: 'Gitee Tag 名称, 提倡以v字母为前缀做为Release名称，例如v1.0或者v2.3.4'
-        required: false
-        default: v1.0
-      gitee_release_name:
-        description: 'Gitee release 名称'
-        required: false
-        default: Test v1.0
-        
-      test_multi_files:
-        description: '测试多文件'
-        required: true
-        type: boolean
-        default: true
-        
-      gitee_file_name:
-        description: '上传的附件名称'
-        required: false
-        default: '测试.txt'
-      gitee_file_path:
-        description: '上传的附件的本地路径'
-        required: false
-        default: 'LICENSE'
-        
-      gitee_release_id:
-        description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
-        required: false
-      gitee_file_name_new:
-        description: '第二次上传的附件名称'
-        required: false
-        default: '测试2.txt'
 jobs:
-  release:
+  # Job 1: 测试单文件创建release和相关操作
+  test-single-file:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.event.ref }}
         
-    - name: Echo inputs
-      run: |
-        echo ${{ github.event.inputs.test_multi_files }}
-        echo ${{ github.event.inputs.test_multi_files == 'false'}}
-        echo ${{ github.event.inputs.test_multi_files == 'true'}}
-        echo ${{ github.event.inputs.gitee_release_id }}
-        echo ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
-        echo ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
-        echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
-        echo ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
-        
-    - name: Test create release(Single file)
-      id: create_release
-      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
+    - name: Test create release with single file
+      id: create_release_single
       uses: ./
       with:
+        gitee_action: create_release
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
-        gitee_tag_name: ${{ inputs.gitee_tag_name }}
-        gitee_release_name: ${{ inputs.gitee_release_name }}
-        gitee_release_body: 'Gitee release 描述'
+        gitee_tag_name: v1.0-single-${{ github.run_number }}
+        gitee_release_name: Single File Test v1.0-${{ github.run_number }}
+        gitee_release_body: 'Gitee single file release test'
         gitee_target_commitish: master
-        gitee_file_name: ${{ inputs.gitee_file_name }}
-        gitee_file_path: ${{ inputs.gitee_file_path }}
+        gitee_file_name: 'single-test.txt'
+        gitee_file_path: 'LICENSE'
           
-    - name: Test create release(Multi file)
-      id: create_release_multi
-      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
+    - name: Test upload additional single file to existing release
       uses: ./
       with:
+        gitee_action: upload_asset
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
-        gitee_tag_name: ${{ inputs.gitee_tag_name }}
-        gitee_release_name: ${{ inputs.gitee_release_name }}
-        gitee_release_body: 'Gitee release 描述'
+        gitee_release_id: ${{ steps.create_release_single.outputs.release-id }}
+        gitee_file_name: 'additional-single.txt'
+        gitee_file_path: 'README.md'
+
+    - name: Test upload using tag_name (single)
+      uses: ./
+      with:
+        gitee_action: upload_asset
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: v1.0-single-${{ github.run_number }}
+        gitee_file_name: 'tag-upload-single.txt'
+        gitee_file_path: 'action.yml'
+        
+    - name: Test update asset
+      uses: ./
+      with:
+        gitee_action: update_asset
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: v1.0-single-${{ github.run_number }}
+        gitee_old_asset_name: 'single-test.txt'
+        gitee_new_file_path: 'requirements.txt'
+        
+    - name: Test delete specific asset
+      uses: ./
+      with:
+        gitee_action: delete_asset
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: v1.0-single-${{ github.run_number }}
+        gitee_delete_assets: 'tag-upload-single.txt'
+        
+    - name: Test delete release
+      uses: ./
+      with:
+        gitee_action: delete_release
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: v1.0-single-${{ github.run_number }}
+
+  # Job 2: 测试多文件创建release和相关操作
+  test-multi-file:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.ref }}
+        
+    - name: Test create release with multiple files
+      id: create_release_multi
+      uses: ./
+      with:
+        gitee_action: create_release
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: v1.0-multi-${{ github.run_number }}
+        gitee_release_name: Multi File Test v1.0-${{ github.run_number }}
+        gitee_release_body: 'Gitee multi file release test'
         gitee_target_commitish: master
         gitee_files: |
           LICENSE
-          requirements.txt
-          .github/workflows/test.yml
+          README.md
+          action.yml
           
-    - name: Test upload single file to exist release - using last step id
-      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'false' }}
+    - name: Test upload additional multiple files to existing release
       uses: ./
       with:
-        gitee_owner: ${{ inputs.gitee_owner }}
-        gitee_repo: ${{ inputs.gitee_repo }}
-        gitee_token: ${{ inputs.gitee_token }}
-        gitee_release_id: ${{ steps.create_release.outputs.release-id }}
-        gitee_file_name: ${{ inputs.gitee_file_name_new }}
-        gitee_file_path: ${{ inputs.gitee_file_path }}
-          
-    - name: Test upload multi file to exist release - using last step id
-      if: ${{ inputs.gitee_release_id == '' && github.event.inputs.test_multi_files == 'true' }}
-      uses: ./
-      with:
+        gitee_action: upload_asset
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
         gitee_release_id: ${{ steps.create_release_multi.outputs.release-id }}
         gitee_files: |
-          action.yml
-          README.md
-          
-    - name: Test upload single file to exist release - using id from inputs
-      if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'false' }}
+          requirements.txt
+          gitee_release.py
+
+    - name: Test upload using tag_name (multi)
       uses: ./
       with:
+        gitee_action: upload_asset
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
-        gitee_release_id: ${{ inputs.gitee_release_id }}
-        gitee_file_name: ${{ inputs.gitee_file_name_new }}
-        gitee_file_path: ${{ inputs.gitee_file_path }}
+        gitee_tag_name: v1.0-multi-${{ github.run_number }}
+        gitee_file_name: 'tag-upload-multi.txt'
+        gitee_file_path: 'LICENSE'
         
-    - name: Test upload multi file to exist release - using id from inputs
-      if: ${{ inputs.gitee_release_id != '' && github.event.inputs.test_multi_files == 'true' }}
+    - name: Test delete multiple assets
       uses: ./
       with:
+        gitee_action: delete_asset
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
-        gitee_release_id: ${{ inputs.gitee_release_id }}
+        gitee_tag_name: v1.0-multi-${{ github.run_number }}
+        gitee_delete_assets: |
+          tag-upload-multi.txt
+          LICENSE
+        
+    - name: Test delete release
+      uses: ./
+      with:
+        gitee_action: delete_release
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: v1.0-multi-${{ github.run_number }}
+
+  # Job 3: 测试使用已存在release ID的场景
+  test-existing-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.ref }}
+        
+    - name: Create base release for testing
+      id: create_base_release
+      uses: ./
+      with:
+        gitee_action: create_release
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: v1.0-existing-${{ github.run_number }}
+        gitee_release_name: Existing Release Test v1.0-${{ github.run_number }}
+        gitee_release_body: 'Test using existing release ID'
+        gitee_target_commitish: master
+        
+    - name: Test upload single file to existing release by ID
+      uses: ./
+      with:
+        gitee_action: upload_asset
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_release_id: ${{ steps.create_base_release.outputs.release-id }}
+        gitee_file_name: 'existing-single.txt'
+        gitee_file_path: 'LICENSE'
+        
+    - name: Test upload multiple files to existing release by ID
+      uses: ./
+      with:
+        gitee_action: upload_asset
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_release_id: ${{ steps.create_base_release.outputs.release-id }}
         gitee_files: |
-          action.yml
           README.md
+          action.yml
+          requirements.txt
+        
+    - name: Test delete release
+      uses: ./
+      with:
+        gitee_action: delete_release
+        gitee_owner: ${{ inputs.gitee_owner }}
+        gitee_repo: ${{ inputs.gitee_repo }}
+        gitee_token: ${{ inputs.gitee_token }}
+        gitee_tag_name: v1.0-existing-${{ github.run_number }}

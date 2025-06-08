@@ -1,6 +1,9 @@
 name: 'action-gitee-release'
 description: '在Gitee项目发布release(可以上传附件)'
 inputs:
+  gitee_action:
+    description: '执行的操作类型: create_release, upload_asset, delete_release, delete_asset, update_asset'
+    required: true
 
   gitee_owner:
     description: 'Gitee 用户名, 项目URL中可获取'
@@ -37,11 +40,25 @@ inputs:
     required: false
     
   gitee_release_id:
-    description: '上传附件对应的release的id。该值存在的话，不会再去尝试创建release。'
+    description: '指定的release ID (upload_asset操作时可选，优先级高于tag_name)'
     required: false
-  
+    
   gitee_upload_retry_times:
     description: '上传附件失败后的尝试次数'
+    required: false
+
+  gitee_delete_asset:
+    description: '要删除的单个附件名称 (delete_asset操作时使用)'
+    required: false
+  gitee_delete_assets:
+    description: '要删除的多个附件名称，每行一个文件名 (delete_asset操作时使用)'
+    required: false
+    
+  gitee_old_asset_name:
+    description: '要更新的旧附件名称 (update_asset操作时使用)'
+    required: false
+  gitee_new_file_path:
+    description: '新附件的本地路径 (update_asset操作时使用)'
     required: false
     
 outputs:
@@ -54,10 +71,11 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Create release or Upload assets
+    - name: Execute Gitee Release Action
       id: release
       shell: bash
       env:
+        gitee_action: ${{ inputs.gitee_action }}
         gitee_owner: ${{ inputs.gitee_owner }}
         gitee_repo: ${{ inputs.gitee_repo }}
         gitee_token: ${{ inputs.gitee_token }}
@@ -70,6 +88,10 @@ runs:
         gitee_file_path: ${{ inputs.gitee_file_path }}
         gitee_release_id: ${{ inputs.gitee_release_id }}
         gitee_upload_retry_times: ${{ inputs.gitee_upload_retry_times }}
+        gitee_delete_asset: ${{ inputs.gitee_delete_asset }}
+        gitee_delete_assets: ${{ inputs.gitee_delete_assets }}
+        gitee_old_asset_name: ${{ inputs.gitee_old_asset_name }}
+        gitee_new_file_path: ${{ inputs.gitee_new_file_path }}
       run: |
         pip install -r "${{ github.action_path }}/requirements.txt"
         python "${{ github.action_path }}/gitee_release.py"
